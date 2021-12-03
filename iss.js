@@ -34,16 +34,18 @@ const fetchCoordsByIP = function(ip, callback) {
     if (err) {
       callback(err, null);
       return;
-    } if (response.statusCode !== 200) {
+    } else if (response.statusCode !== 200) {
       const msg = `Status Code ${response.statusCode} when fetching Coordinates: ${body}`;
       callback(Error(msg), null);
       return;
+    } else {
+   //const data = JSON.parse(body).latitude
+   const { latitude, longitude } = JSON.parse(body);
+   //console.log({ latitude, longitute});
+           
+   callback(null, { latitude, longitude });
     }
-    //const data = JSON.parse(body).latitude
-    const { latitude, longitude } = JSON.parse(body);
-    //console.log({ latitude, longitute});
-            
-    callback(null, { latitude, longitude });
+ 
         
   });
 
@@ -56,13 +58,15 @@ const fetchISSFlyOverTimes = function(coordinates, callback) {
     if (err) {
       callback(err, null);
       return;
-    } if (response.statusCode !== 200) {
+    } else if (response.statusCode !== 200) {
       const msg = `Status Code ${response.statusCode} when fetching ISS pass times: ${body}`;
       callback(Error(msg), null);
       return;
+    } else {
+      const passes = JSON.parse(body).response;
+      callback(null, passes);
     }
-    const passes = JSON.parse(body).response;
-    callback(null, passes);
+   
   });
 };
 
